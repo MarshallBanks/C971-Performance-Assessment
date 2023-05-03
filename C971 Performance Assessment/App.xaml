@@ -7,20 +7,6 @@
             <Style TargetType="Label">
                 <Setter Property="TextColor" Value= "White"/>
             </Style>
-
-            <DataTemplate x:Key="CourseTemplate">
-                <StackLayout BackgroundColor="#292929" Margin="20" Padding="10" Spacing="10">
-                    <StackLayout Orientation="Horizontal" Spacing="5">
-                        <Label Text="Course Number" FontAttributes="Bold" VerticalOptions="CenterAndExpand" />
-                        <Image Source="ellipsis.png" HeightRequest="20" WidthRequest="20" VerticalOptions="CenterAndExpand" />
-                    </StackLayout>
-                    <Label Text="Course Title" FontAttributes="Bold" />
-                    <BoxView Color="Black" HeightRequest="1" />
-                    <Label Text="ASSESSMENTS" FontAttributes="Bold" />
-                    <Label Text="Objective -" />
-                    <Label Text="Performance -" />
-                </StackLayout>
-            </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

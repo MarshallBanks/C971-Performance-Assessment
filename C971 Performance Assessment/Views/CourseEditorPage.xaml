@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="C971_Performance_Assessment.Views.CourseEditorPage"
+             BackgroundColor="#333333" >
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style TargetType="BoxView">
+                <Setter Property="Color" Value="Black" />
+                <Setter Property="HeightRequest" Value="2" />
+                <Setter Property="Margin" Value="15,10,15,0" />
+                <Setter Property="CornerRadius" Value="1" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+        <StackLayout>
+            <Label Text="COURSE EDITOR" 
+                   HorizontalOptions="Center" 
+                   Margin="10"
+                   FontSize="24"/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,176 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="C971_Performance_Assessment.Pages.CourseDetailsPage"
+             xmlns:fontAwesome="clr-namespace:FontAwesome" 
+             xmlns:vm="clr-namespace:C971_Performance_Assessment.View_Models" 
+             xmlns:local="clr-namespace:C971_Performance_Assessment"
+             BackgroundColor ="#333333">
+    
+    <ContentPage.BindingContext>
+        <vm:CourseDetailsViewModel/>
+    </ContentPage.BindingContext>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style TargetType="BoxView">
+                <Setter Property="Color" Value="Black" />
+                <Setter Property="HeightRequest" Value="2" />
+                <Setter Property="Margin" Value="15,10,15,0" />
+                <Setter Property="CornerRadius" Value="1" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout>
+                <!-- BACK/HEADER/ELLIPSES GRID -->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"  />
+                    </Grid.RowDefinitions>
+
+                    <!-- BACK ARROW FONT ICON -->
+                    <Label     Text="{x:Static fontAwesome:FontAwesomeIcons.ArrowLeft}" 
+                               Grid.Column="0"
+                               FontFamily="FAS"
+                               HorizontalTextAlignment="Center" 
+                               FontSize="30" 
+                               FontAttributes="Bold" 
+                               Margin="10,15,0,0">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding BackArrowTappedCommand}" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                    <!-- PAGE HEADER / STATUS LABEL -->
+                    <StackLayout Grid.Column="1" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                        <Label Text="COURSE DETAILS"
+                               HorizontalTextAlignment="Center" 
+                               FontSize="24"  
+                               Margin="0,10,0,-5"/>
+                        <Label Text="Status:" 
+                               FontSize="20" 
+                               HorizontalTextAlignment="Center"/>
+                    </StackLayout>
+
+                    <!-- ELLIPSES FONT ICON -->
+                    <Label     Text="{x:Static fontAwesome:FontAwesomeIcons.Ellipsis}" 
+                               Grid.Column="2"
+                               FontFamily="FAS" 
+                               HorizontalOptions="End"
+                               FontSize="40" 
+                               FontAttributes="Bold" 
+                               Margin="-18,10,10,0">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding EllipsesTappedCommand}"/>
+                        </Label.GestureRecognizers>
+                    </Label>
+                </Grid>
+                <!-- COURSE NUMBER/TITLE -->
+                <Label     x:Name="CourseNumber" Text="COURSE NUMBER" FontAttributes="Bold" FontSize="24" Margin="10,10,0,0"/>
+                <Label     x:Name="CourseTitle" Text="COURSE TITLE" FontAttributes="Bold" FontSize="24" Margin="10,-5,0,0"/>
+                <BoxView/>
+                <!--COURSE DATES AND ALERT STATUS-->
+                <Label     Text="Start Date - End Date" FontAttributes="Bold" FontSize="20" Margin="10,10,0,0"/>
+                <Label     x:Name="CourseDates" Text="MM/DD/YY - MM/DD/YY" FontSize="20" Margin="10,-5,0,0"/>
+                <Label     x:Name="AlertStatus" Text="Alerts: ON" FontAttributes="Bold" FontSize="18" Margin="10,-5,0,0"/>
+                <BoxView/>
+                <!--INSTRUCTOR INFO-->
+                <Label     Text="Instructor" FontAttributes="Bold" FontSize="24" Margin="10,10,0,0"/>
+                <Label     x:Name="InstructorName" Text="John Doe" FontSize="20" Margin="10,-5,0,0"/>
+                <Label     x:Name="InsructorEmail" Text="john.doe@wgu.edu" FontSize="20" Margin="10,-5,0,0"/>
+                <Label     x:Name="InstructorNumber" Text="385.555.1234" FontSize="20" Margin="10,-5,0,0"/>
+                <BoxView/>
+                <!--NOTES-->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackLayout Grid.Column="0">
+                        <Label Text="Notes" FontAttributes="Bold" FontSize="24" Margin="10,10,0,0"/>
+                        <Label Text="NOTES TEXT PLACEHOLDER" FontSize="13" Margin="10,-5,0,0"/>
+                    </StackLayout>
+
+                    <Label Grid.Column="1" 
+                           Text="{x:Static fontAwesome:FontAwesomeIcons.ShareFromSquare}" 
+                           FontFamily="FAS" 
+                           FontSize="25"
+                           HorizontalOptions="End"
+                           Margin="10"/>
+                </Grid>
+                <BoxView/>
+                <!--ASSESSMENTS-->
+                <Label Text="Assessments" FontAttributes="Bold" FontSize="24" Margin="10,10,0,0"/>
+                <!--PERFORMANCE ASSESSMENT-->
+                <Frame BorderColor="Black" Padding="10" Margin="15,10,15,0" BackgroundColor="White">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Image Grid.Column ="0"
+                                           Margin="6,5,0,0"
+                                           Source="{local:ImageResource Source=C971_Performance_Assessment.Images.LETTERP.png}"
+                                           WidthRequest="30"
+                                           HeightRequest="30"/>
+                        <StackLayout Grid.Column="1" Orientation="Vertical" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                            <Label x:Name="PATitle" Text="Performance Assessment - BOP3" FontAttributes="Bold" TextColor="Black" />
+                            <Label x:Name="PADates" Text="MM/DD/YY - MM/DD/YY" FontAttributes="Bold" TextColor="Black" Margin="27,0,0,0" />
+                        </StackLayout>
+                        <Image  x:Name="PAAlarm"
+                                Grid.Column ="2"
+                                Margin="6,5,0,0"
+                                Source="{local:ImageResource Source=C971_Performance_Assessment.Images.alarm-on.png}"
+                                WidthRequest="40"
+                                HeightRequest="40"/>
+                    </Grid>
+                </Frame>
+                <!--OBJECTIVE ASSESSMENT-->
+                <Frame BorderColor="Black" Padding="10" Margin="15,10,15,0" BackgroundColor="White">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Image Grid.Column ="0"
+                                           Margin="6,5,0,0"
+                                           Source="{local:ImageResource Source=C971_Performance_Assessment.Images.LETTERO.png}"
+                                           WidthRequest="30"
+                                           HeightRequest="30"/>
+                        <StackLayout Grid.Column="1" Orientation="Vertical" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                            <Label x:Name="OATitle" Text="Performance Assessment - BOP3" FontAttributes="Bold" TextColor="Black" />
+                            <Label x:Name="OADates" Text="MM/DD/YY - MM/DD/YY" FontAttributes="Bold" TextColor="Black" Margin="27,0,0,0" />
+                        </StackLayout>
+                        <Image  x:Name="OAAlarm"
+                                Grid.Column ="2"
+                                Margin="6,5,0,0"
+                                Source="{local:ImageResource Source=C971_Performance_Assessment.Images.alarm-on.png}"
+                                WidthRequest="40"
+                                HeightRequest="40"/>
+                    </Grid>
+                </Frame>
+                <!-- SPACER -->
+                <BoxView HeightRequest="50" Color="Transparent" />
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>
