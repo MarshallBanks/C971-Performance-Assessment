@@ -58,21 +58,27 @@
 
             </Grid>
 
-            <!-- Date Picker/Label/Edit Icon -->
-            <Grid>
+            <!-- Term Dates/Label/Edit Icon -->
+            <Grid Margin="0,0,0,15">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="5" />
+                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
+                <Label Grid.Column="0" x:Name="StartDateLabel" Text="MM/DD/YYYY" FontAttributes="Bold" Margin="10,3,0,0" FontSize="20" IsVisible="{Binding IsDateLabelVisible}"/>
+                <Label Grid.Column="1" x:Name="HyphenLabel" Text="-" FontAttributes="Bold" Margin="0,3,0,0" FontSize="20"/>
+                <Label Grid.Column="2" x:Name="EndDateLabel" Text="MM/DD/YYYY" FontAttributes="Bold" Margin="0,3,0,0" FontSize="20" IsVisible="{Binding IsDateLabelVisible}"/>
 
-                <Label Grid.Column="0" x:Name="DateLabel" Text="MM/DD/YYYY - MM/DD/YYYY" FontAttributes="Bold" Margin="10,3,0,0" FontSize="20"/>
+                <DatePicker x:Name="StartDatePicker" DateSelected="StartDatePicker_DateSelected" FontSize="20" BackgroundColor="Gray" TextColor="White" Format="MM/dd/yyyy" Grid.Column="0" Grid.Row ="0"  Margin="10,-8,0,-10" IsVisible="{Binding IsDatePickerVisible}"/>
+                <DatePicker x:Name="EndDatePicker" DateSelected="EndDatePicker_DateSelected" BackgroundColor="Gray" FontSize="20" TextColor="White" Format="MM/dd/yyyy" Grid.Column="2" Grid.Row ="0"  Margin="0,-8,0,-10" IsVisible="{Binding IsDatePickerVisible}"/>
 
-                <DatePicker x:Name="DateEntry" Grid.Column="0" Format="MM/dd/yy - MM/dd/yy" Grid.Row ="1"  Margin="10,-54,0,0" IsVisible="False"/>
-
-                <Label Grid.Column="1" Text="{x:Static fontAwesome:FontAwesomeIcons.Calendar}" FontFamily="FAS" FontSize="20" Margin="0,5,0,0" />
+                <Label Grid.Column="3" Text="{Binding DateIcon}" FontFamily="FAS" FontSize="20" Margin="0,5,0,0" >
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding DateIconTappedCommand}" />
+                    </Label.GestureRecognizers>
+                </Label>
             </Grid>
-
             <views:CourseCard/>
 
 

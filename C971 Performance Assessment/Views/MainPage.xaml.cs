@@ -21,6 +21,7 @@ namespace C971_Performance_Assessment
 
             // Subscribe to the PenTapped message and set the focus to the TitleEntry element
             MessagingCenter.Subscribe<MainViewModel>(this, "PenTapped", OnPenTapped);
+
         }
 
         private void TitleEntry_Completed(object sender, EventArgs e)
@@ -31,8 +32,29 @@ namespace C971_Performance_Assessment
 
         private void OnPenTapped(MainViewModel sender)
         {
+            Label titleLabel = this.FindByName<Label>("TitleLabel");
             Entry titleEntry = this.FindByName<Entry>("TitleEntry");
-            titleEntry?.Focus();
+            if (titleLabel.IsVisible == false)
+            {
+                titleEntry?.Focus();
+            }
+            
         }
+
+        private void EndDatePicker_DateSelected(object sender, DateChangedEventArgs e)
+        {
+            UpdateDateLabel();
+        }
+
+        private void StartDatePicker_DateSelected(object sender, DateChangedEventArgs e)
+        {
+            UpdateDateLabel();
+        }
+
+        private void UpdateDateLabel()
+        {
+
+        }
+
     }
 }

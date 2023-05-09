@@ -1,8 +1,6 @@
 ﻿using C971_Performance_Assessment.Pages;
-using System;
-using System.Collections.Generic;
+using C971_Performance_Assessment.Views;
 using System.Diagnostics;
-using System.Text;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -34,7 +32,7 @@ namespace C971_Performance_Assessment.View_Models
                     // Add a new course
                     break;
                 case "Edit":
-                    // Edit the current course
+                    _ = Application.Current.MainPage.Navigation.PushAsync(new CourseEditorPage());
                     break;
                 case "Delete":
                     // Delete the current course
