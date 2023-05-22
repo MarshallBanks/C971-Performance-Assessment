@@ -6,6 +6,7 @@
              xmlns:fontAwesome="clr-namespace:FontAwesome" 
              xmlns:views="clr-namespace:C971_Performance_Assessment.Views" 
              xmlns:vm="clr-namespace:C971_Performance_Assessment.View_Models" 
+             xmlns:data="clr-namespace:C971_Performance_Assessment.Data"
              BackgroundColor ="#002f51">
     <ContentPage.BindingContext>
         <vm:MainViewModel/>
@@ -31,9 +32,13 @@
                 <Label Grid.Row="1" Grid.Column ="0" Text="DEGREE PLANNER" Margin="10,-10,0,0" FontAttributes="Bold" TextColor="Default"/>
 
                 <!-- Picker control -->
-                <Picker Grid.Row="1" Grid.Column="1" Margin="0,-30,5,5" Title="Term 1">
-
+                <Picker Grid.Row="1" Grid.Column="1" Margin="0,-30,5,5" Title="Select a Term"
+                        ItemsSource="{Binding Terms}" SelectedItem="{Binding SelectedTerm}" SelectedIndexChanged="Picker_SelectedIndexChanged">
+                    <Picker.ItemDisplayBinding>
+                        <Binding Path="Name"/>
+                    </Picker.ItemDisplayBinding>
                 </Picker>
+
 
             </Grid>
 
@@ -44,15 +49,20 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <Label x:Name="TitleLabel" IsVisible="{Binding IsTitleLabelVisible}" Grid.Column="0" Text="TERM TITLE" FontAttributes="Bold" Margin="10,20,0,0" FontSize="20"/>
+                <Label x:Name="TitleLabel" IsVisible="{Binding IsTitleLabelVisible}" Grid.Column="0" Text="{Binding TermName}" FontAttributes="Bold" Margin="10,20,0,0" FontSize="20" />
 
-                <Label x:Name="PenLabel" Grid.Column="1" Text="{x:Static fontAwesome:FontAwesomeIcons.Pen}" FontFamily="FAS" FontSize="20" Margin="0,23,0,0">
+                <Label x:Name="PenLabel" Grid.Column="1" Text="{x:Static fontAwesome:FontAwesomeIcons.Pen}" FontFamily="FAS" FontSize="20" Margin="0,23,0,0" IsVisible="{Binding IsIconsVisible}">
                     <Label.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding PenTappedCommand}" />
                     </Label.GestureRecognizers>
                 </Label>
 
-                <Entry x:Name="TitleEntry" IsVisible="{Binding IsTitleEntryVisible}" Completed="TitleEntry_Completed" TextTransform="Uppercase" FontAttributes="Bold" Margin="10,10,0,-10.8" FontSize ="20" WidthRequest="{Binding Source={x:Reference TitleLabel}, Path=Width}"/>
+                <Entry x:Name="TitleEntry" IsVisible="{Binding IsTitleEntryVisible}" Text="{Binding TermName}" 
+                       Completed="TitleEntry_Completed" TextColor="White" 
+                       Focused="TitleEntry_Focused"
+                       FontAttributes="Bold" Margin="6,10,-4,-10.8" FontSize ="20"/>
+                <!--"{Binding Source={x:Reference TitleLabel}, Path=Width}"/>-->
+
 
 
 
@@ -66,25 +76,30 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <Label Grid.Column="0" x:Name="StartDateLabel" Text="MM/DD/YYYY" FontAttributes="Bold" Margin="10,3,0,0" FontSize="20" IsVisible="{Binding IsDateLabelVisible}"/>
-                <Label Grid.Column="1" x:Name="HyphenLabel" Text="-" FontAttributes="Bold" Margin="0,3,0,0" FontSize="20"/>
-                <Label Grid.Column="2" x:Name="EndDateLabel" Text="MM/DD/YYYY" FontAttributes="Bold" Margin="0,3,0,0" FontSize="20" IsVisible="{Binding IsDateLabelVisible}"/>
+                <Label Grid.Column="0" x:Name="StartDateLabel" Text="{Binding TermStartDate, StringFormat='{0:MM/dd/yy}'}" FontAttributes="Bold" Margin="10,3,0,0" FontSize="20" IsVisible="{Binding IsDateLabelVisible}"/>
+                <Label Grid.Column="1" x:Name="HyphenLabel" Text="-" FontAttributes="Bold" Margin="0,3,0,0" FontSize="20" IsVisible="{Binding IsDateLabelVisible}"/>
+                <Label Grid.Column="2" x:Name="EndDateLabel" Text="{Binding TermEndDate, StringFormat='{0:MM/dd/yy}'}" FontAttributes="Bold" Margin="0,3,0,0" FontSize="20" IsVisible="{Binding IsDateLabelVisible}"/>
 
-                <DatePicker x:Name="StartDatePicker" DateSelected="StartDatePicker_DateSelected" FontSize="20" BackgroundColor="Gray" TextColor="White" Format="MM/dd/yyyy" Grid.Column="0" Grid.Row ="0"  Margin="10,-8,0,-10" IsVisible="{Binding IsDatePickerVisible}"/>
-                <DatePicker x:Name="EndDatePicker" DateSelected="EndDatePicker_DateSelected" BackgroundColor="Gray" FontSize="20" TextColor="White" Format="MM/dd/yyyy" Grid.Column="2" Grid.Row ="0"  Margin="0,-8,0,-10" IsVisible="{Binding IsDatePickerVisible}"/>
+                <DatePicker x:Name="StartDatePicker" Date="{Binding TermStartDate}" FontSize="20" BackgroundColor="Gray" TextColor="White" Format="MM/dd/yyyy" Grid.Column="0" Grid.Row ="0"  Margin="10,-8,0,-10" IsVisible="{Binding IsDatePickerVisible}"/>
+                <DatePicker x:Name="EndDatePicker" Date="{Binding TermEndDate}" BackgroundColor="Gray" FontSize="20" TextColor="White" Format="MM/dd/yyyy" Grid.Column="2" Grid.Row ="0"  Margin="0,-8,0,-10" IsVisible="{Binding IsDatePickerVisible}"/>
 
-                <Label Grid.Column="3" Text="{Binding DateIcon}" FontFamily="FAS" FontSize="20" Margin="0,5,0,0" >
+                <Label Grid.Column="3" Text="{Binding DateIcon}" FontFamily="FAS" FontSize="20" Margin="0,5,0,0" IsVisible="{Binding IsIconsVisible}">
                     <Label.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding DateIconTappedCommand}" />
                     </Label.GestureRecognizers>
                 </Label>
             </Grid>
-            <views:CourseCard/>
 
+            <CollectionView ItemsSource="{Binding Courses}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <views:CourseCard/>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
 
 
         </StackLayout>
     </ScrollView>
-    
-
+   
 </ContentPage>

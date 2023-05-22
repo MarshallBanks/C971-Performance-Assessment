@@ -126,7 +126,11 @@
                     <StackLayout Grid.Column="0" >
                         <Label Text="Status" FontSize="18"/>
                         <Frame>
-                            <Entry Text="Active"/>
+                            <Picker Title="Select a status" ItemsSource="{Binding CourseStatuses}" SelectedItem="{Binding SelectedCourseStatus}">
+                                <Picker.ItemDisplayBinding>
+                                    <Binding Path="Name"/>
+                                </Picker.ItemDisplayBinding>
+                            </Picker>
                         </Frame>
                     </StackLayout>
 

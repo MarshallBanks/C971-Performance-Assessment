@@ -1,41 +1,41 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentView 
+<ContentView
     xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:fontAwesome="clr-namespace:FontAwesome"
- 
-             x:Class="C971_Performance_Assessment.Views.CourseCard">
+             xmlns:fontAwesome="clr-namespace:FontAwesome" 
+             xmlns:data="clr-namespace:C971_Performance_Assessment.Data"
+             x:Class="C971_Performance_Assessment.Views.CourseCard"
+             x:DataType="data:Course">
 
     <StackLayout BackgroundColor="#292929" Margin="10,10,10,0" Padding="10" Spacing="10">
         <StackLayout Orientation="Horizontal" Spacing="5">
-            <Grid HorizontalOptions="FillAndExpand">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <Grid>
-                    <Grid.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding CardTappedCommand}"/>
-                    </Grid.GestureRecognizers>
-                    <Label Grid.Column="0" Text="Course Number" FontAttributes="Bold" VerticalOptions="CenterAndExpand"/>
+                <Grid HorizontalOptions="FillAndExpand">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Grid>
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="CardTapped"/>
+                        </Grid.GestureRecognizers>
+                        <Label Grid.Column="0" Text="Course Number" FontAttributes="Bold" VerticalOptions="CenterAndExpand"/>
+                    </Grid>
+                    <Label Grid.Column="1" Text="{x:Static fontAwesome:FontAwesomeIcons.Ellipsis}" FontFamily="FAS" TextColor="White" FontSize="30" Margin="0,0,5,0" HorizontalOptions="End">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="EllipsesTapped"/>
+                        </Label.GestureRecognizers>
+                    </Label>
                 </Grid>
-                <Label Grid.Column="1" Text="{x:Static fontAwesome:FontAwesomeIcons.Ellipsis}" FontFamily="FAS" TextColor="White" FontSize="30" Margin="0,0,5,0" HorizontalOptions="End">
-                    <Label.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding EllipsesTappedCommand}"/>
-                    </Label.GestureRecognizers>
-                </Label>
-            </Grid>
-        </StackLayout>
+            </StackLayout>
         <StackLayout>
             <StackLayout.GestureRecognizers>
-                <TapGestureRecognizer Command="{Binding CardTappedCommand}"/>
+                <TapGestureRecognizer Tapped="CardTapped"/>
             </StackLayout.GestureRecognizers>
-            <Label Text="Course Title" FontAttributes="Bold" />
+            <Label Text="{Binding Title}" FontAttributes="Bold" />
             <BoxView Color="Black" HeightRequest="1" />
             <Label Text="ASSESSMENTS" FontAttributes="Bold" />
             <Label Text="Objective -" />
             <Label Text="Performance -" />
         </StackLayout>
     </StackLayout>
-    
 </ContentView>

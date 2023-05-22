@@ -14,7 +14,6 @@ namespace C971_Performance_Assessment
 {
     public partial class MainPage : ContentPage
     {
-
         public MainPage()
         {
             InitializeComponent();
@@ -38,23 +37,18 @@ namespace C971_Performance_Assessment
             {
                 titleEntry?.Focus();
             }
-            
         }
 
-        private void EndDatePicker_DateSelected(object sender, DateChangedEventArgs e)
+        private void Picker_SelectedIndexChanged(object sender, EventArgs e)
         {
-            UpdateDateLabel();
+            MainViewModel mainViewModel = (MainViewModel)BindingContext;
+            mainViewModel.OnTermSelected();
         }
 
-        private void StartDatePicker_DateSelected(object sender, DateChangedEventArgs e)
+        private void TitleEntry_Focused(object sender, FocusEventArgs e)
         {
-            UpdateDateLabel();
+            var entry = (Entry)sender;
+            entry.CursorPosition = entry.Text?.Length ?? 0;
         }
-
-        private void UpdateDateLabel()
-        {
-
-        }
-
     }
 }

@@ -27,7 +27,7 @@ namespace C971_Performance_Assessment.Data
             return _instance;
         }
 
-        private SQLiteAsyncConnection GetConnection()
+        public SQLiteAsyncConnection GetConnection()
         {
             return _database;
         }
