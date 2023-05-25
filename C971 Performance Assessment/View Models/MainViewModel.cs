@@ -9,6 +9,8 @@ using FontAwesome;
 using System.Threading.Tasks;
 using C971_Performance_Assessment.Data;
 using System.Collections.ObjectModel;
+using C971_Performance_Assessment.Views;
+using C971_Performance_Assessment.Pages;
 
 namespace C971_Performance_Assessment.View_Models
 {
@@ -74,6 +76,9 @@ namespace C971_Performance_Assessment.View_Models
                     _selectedTerm = value;
                     OnPropertyChanged(nameof(SelectedTerm));
                 }
+
+                // Update the global variable
+                Globals.SelectedTerm = value;
             }
         }
 
@@ -122,7 +127,7 @@ namespace C971_Performance_Assessment.View_Models
         // Property to hold the collection of terms
         public ObservableCollection<Term> Terms { get; set; }
 
-        // Property to hold the collection of terms
+        // Property to hold the collection of Courses
 
         private ObservableCollection<Course> _courses;
         public ObservableCollection<Course> Courses
@@ -159,6 +164,14 @@ namespace C971_Performance_Assessment.View_Models
 
             // Initialize the TermRepository object
             _courseRepository = new CourseRepository(Database.GetInstance().GetConnection());
+
+            // Subscribe to the message
+            MessagingCenter.Subscribe<CourseCard>(this, "AddNewCourseMessage", (sender) =>
+            {
+                // Handle the message, e.g., add the new course
+                Debug.WriteLine("Message Received");
+                AddNewCourseAsync();
+            });
 
             // Load the terms
             _ = LoadTermsAsync();
@@ -226,23 +239,15 @@ namespace C971_Performance_Assessment.View_Models
         {
             Courses = new ObservableCollection<Course>();
 
-            Courses.Add(new Course { Title = "New Course 1" });  // Add a dummy course
-            Courses.Add(new Course { Title = "New Course 2" });  // Add a dummy course
-            Courses.Add(new Course { Title = "New Course 3" });  // Add a dummy course
+            List<Course> courses = await _courseRepository.GetCoursesAsync();
 
-            //List<Course> courses = await _courseRepository.GetCoursesAsync();
-
-            //if (courses == null)
-            //{
-            //    Courses.Add(new Course { Title = "New Course" });  // Add a dummy course
-            //}
-            //else
-            //{
-            //    foreach (Course course in courses)
-            //    {
-            //        Courses.Add(course);  // Populate Courses with the list of courses
-            //    }
-            //}
+            foreach (Course course in courses)
+            {
+                if (course.TermId == SelectedTerm.Id)
+                {
+                    Courses.Add(course);
+                }
+            }
         }
 
         private async void OnDateIconTapped()
@@ -322,6 +327,23 @@ namespace C971_Performance_Assessment.View_Models
             SkipOnTermSelected = false;
         }
 
+        private async Task AddNewCourseAsync()
+        {
+            Debug.WriteLine("AddNewCourseAsync Executed");
+
+            // Create a new course
+            Course newCourse = new Course
+            {
+                Title = "New Course",
+                TermId = SelectedTerm.Id
+            };
+
+            // Save the new course to the database
+            _ = await _courseRepository.SaveCourseAsync(newCourse);
+
+            await LoadCoursesAsync();
+        }
+
         public async void OnTermSelected()
         {
             if (SkipOnTermSelected == true)
@@ -368,6 +390,9 @@ namespace C971_Performance_Assessment.View_Models
                             SkipOnTermSelected = false;
                             SelectedTerm = term;
                             SkipOnTermSelected = true;
+
+                            AddNewCourseAsync();
+
                             break;
                         }
                     }
@@ -381,6 +406,8 @@ namespace C971_Performance_Assessment.View_Models
                     IsIconsVisible = false;
                     IsTitleLabelVisible = true;
                     IsDateLabelVisible = false;
+
+                    _ = LoadCoursesAsync();
                 }
                 // Actual Term Selected
                 else
@@ -404,6 +431,8 @@ namespace C971_Performance_Assessment.View_Models
                             TermStartDate = SelectedTerm.StartDate;
                             TermEndDate = SelectedTerm.EndDate;
                             Debug.WriteLine($"Selected Term End Date is {SelectedTerm.EndDate}");
+
+                            _ = LoadCoursesAsync();
                         }
                     }
                     catch (Exception ex)
@@ -412,10 +441,10 @@ namespace C971_Performance_Assessment.View_Models
                         Debug.WriteLine($"Stack Trace: {ex.StackTrace}");
                     }
 
-
+                    
                 }
             }
-        } 
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -427,3 +456,10 @@ namespace C971_Performance_Assessment.View_Models
         }
     }
 }
+
+
+
+
+
+
+

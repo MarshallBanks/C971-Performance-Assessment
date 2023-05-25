@@ -5,7 +5,7 @@
              xmlns:fontAwesome="clr-namespace:FontAwesome" 
              xmlns:data="clr-namespace:C971_Performance_Assessment.Data"
              x:Class="C971_Performance_Assessment.Views.CourseCard"
-             x:DataType="data:Course">
+             xmlns:vm="clr-namespace:C971_Performance_Assessment.View_Models" >
 
     <StackLayout BackgroundColor="#292929" Margin="10,10,10,0" Padding="10" Spacing="10">
         <StackLayout Orientation="Horizontal" Spacing="5">
@@ -16,13 +16,13 @@
                     </Grid.ColumnDefinitions>
                     <Grid>
                         <Grid.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="CardTapped"/>
+                        <TapGestureRecognizer Tapped="CardTapped"/>
                         </Grid.GestureRecognizers>
                         <Label Grid.Column="0" Text="Course Number" FontAttributes="Bold" VerticalOptions="CenterAndExpand"/>
                     </Grid>
                     <Label Grid.Column="1" Text="{x:Static fontAwesome:FontAwesomeIcons.Ellipsis}" FontFamily="FAS" TextColor="White" FontSize="30" Margin="0,0,5,0" HorizontalOptions="End">
                         <Label.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="EllipsesTapped"/>
+                        <TapGestureRecognizer Tapped="EllipsesTapped"/>
                         </Label.GestureRecognizers>
                     </Label>
                 </Grid>
@@ -31,11 +31,11 @@
             <StackLayout.GestureRecognizers>
                 <TapGestureRecognizer Tapped="CardTapped"/>
             </StackLayout.GestureRecognizers>
-            <Label Text="{Binding Title}" FontAttributes="Bold" />
-            <BoxView Color="Black" HeightRequest="1" />
-            <Label Text="ASSESSMENTS" FontAttributes="Bold" />
-            <Label Text="Objective -" />
-            <Label Text="Performance -" />
+            <Label x:DataType="data:Course" Text="{Binding Title}" FontAttributes="Bold" />
+            <BoxView x:DataType="data:Course" Color="Black" HeightRequest="1" />
+            <Label x:DataType="data:Course" Text="ASSESSMENTS" FontAttributes="Bold" />
+            <Label x:DataType="data:Course" Text="Objective -" />
+            <Label x:DataType="data:Course" Text="Performance -" />
         </StackLayout>
     </StackLayout>
 </ContentView>

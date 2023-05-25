@@ -19,24 +19,24 @@ namespace C971_Performance_Assessment.Data
             return _database.Table<Course>().ToListAsync();
         }
 
-        public Task<Term> GetTermAsync(int id)
+        public Task<Course> GetCourseAsync(int id)
         {
-            return _database.Table<Term>()
+            return _database.Table<Course>()
                             .Where(i => i.Id == id)
                             .FirstOrDefaultAsync();
         }
 
-        public Task<int> SaveTermAsync(Course course)
+        public Task<int> SaveCourseAsync(Course course)
         {
-            Debug.WriteLine($"SaveTermAsync Reached. Term {course.Id}");
+            Debug.WriteLine($"SaveCourseAsync Reached. Course {course.Id}");
             if (course.Id != 0)
             {
-                Debug.WriteLine($"UpdateAsync reached. Term {course.Id}");
+                Debug.WriteLine($"UpdateAsync reached. Course {course.Id}");
                 return _database.UpdateAsync(course);
             }
             else
             {
-                Debug.WriteLine($"InsertAsync Reached. Term {course.Id}");
+                Debug.WriteLine($"InsertAsync Reached. Course {course.Id}");
                 return _database.InsertAsync(course);
             }
 

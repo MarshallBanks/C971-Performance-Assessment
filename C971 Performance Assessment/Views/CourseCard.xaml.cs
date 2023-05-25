@@ -1,4 +1,6 @@
-﻿using C971_Performance_Assessment.Pages;
+﻿using C971_Performance_Assessment.Data;
+using C971_Performance_Assessment.Pages;
+using C971_Performance_Assessment.View_Models;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -14,6 +16,7 @@ namespace C971_Performance_Assessment.Views
         {
             InitializeComponent();
         }
+
 
         private void OpenCourseDetails()
         {
@@ -36,7 +39,7 @@ namespace C971_Performance_Assessment.Views
             switch (action)
             {
                 case "Add New Course":
-                    // Add a new course
+                    AddNewCourse();
                     break;
                 case "Edit":
                     _ = Application.Current.MainPage.Navigation.PushAsync(new CourseEditorPage());
@@ -51,6 +54,13 @@ namespace C971_Performance_Assessment.Views
                     // Do nothing
                     break;
             }
+        }
+
+        private void AddNewCourse()
+        {
+            Debug.WriteLine("Message Sent");
+            // Send the message to trigger the method in the MainViewModel
+            MessagingCenter.Send(this, "AddNewCourseMessage");
         }
 
         private void EllipsesTapped(object sender, System.EventArgs e)
