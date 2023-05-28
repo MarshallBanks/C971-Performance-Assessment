@@ -165,12 +165,19 @@ namespace C971_Performance_Assessment.View_Models
             // Initialize the TermRepository object
             _courseRepository = new CourseRepository(Database.GetInstance().GetConnection());
 
-            // Subscribe to the message
+            // Add New Course
             MessagingCenter.Subscribe<CourseCard>(this, "AddNewCourseMessage", (sender) =>
             {
                 // Handle the message, e.g., add the new course
-                Debug.WriteLine("Message Received");
-                AddNewCourseAsync();
+                Debug.WriteLine("Add Course Message Received");
+                _ = AddNewCourseAsync();
+            });
+
+            // Delete Course
+            MessagingCenter.Subscribe<CourseCard, Course>(this, "DeleteCourseMessage", (sender, course) =>
+            {
+                Debug.WriteLine("Delete Course Message Received");
+                _ = DeleteCourse(course);
             });
 
             // Load the terms
@@ -342,6 +349,18 @@ namespace C971_Performance_Assessment.View_Models
             _ = await _courseRepository.SaveCourseAsync(newCourse);
 
             await LoadCoursesAsync();
+        }
+
+        private async Task DeleteCourse(Course course)
+        {
+            _ = Courses.Remove(course);
+
+            _ = _courseRepository.DeleteCourseAsync(course);
+
+            if (Courses.Count == 0)
+            {
+                _ = AddNewCourseAsync();
+            }
         }
 
         public async void OnTermSelected()

@@ -14,85 +14,16 @@ namespace C971_Performance_Assessment.Data
     {
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
-        public string Code { get; set; }
-        public string Title { get; set; }
-        public string InstructorName { get; set; }
-        public string InstructorNumber { get; set; }
-        public string InstructorEmail { get; set; }
-        public string Notes { get; set; }
-        public CourseStatus Status { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public string Code { get; set; } = "Course Number";
+        public string Title { get; set; } = "Course Title";
+        public string InstructorName { get; set; } = "Instructor Name";
+        public string InstructorNumber { get; set; } = "Instructor Number";
+        public string InstructorEmail { get; set; } = "www.example@wgu.edu";
+        public string Notes { get; set; } = "Enter notes here";
+        public CourseStatus Status { get; set; } = CourseStatus.InProgress;
+        public DateTime StartDate { get; set; } = DateTime.Now;
+        public DateTime EndDate { get; set; } = DateTime.Now.AddDays(7);
         public int TermId { get; set; }
-        public int AssessmentOAId { get; set; }
-        public int AssessmentPAId { get; set; }
-
-        //public event PropertyChangedEventHandler PropertyChanged;
-
-        //[Ignore]
-        //public bool IsCourseCardVisible { get; set; }
-
-        //[Ignore]
-        //public ICommand EllipsesTappedCommand { get; set; }
-
-        //[Ignore]
-        //public ICommand CardTappedCommand { get; set; }
-
-        //public Course()
-        //{
-        //    // Initialize the EllipsesTappedCommand Property with a new Command
-        //    EllipsesTappedCommand = new Command(OnEllipsesTapped);
-
-        //    CardTappedCommand = new Command(OnCardTapped);
-        //}
-
-        //private async void OnEllipsesTapped()
-        //{
-        //    // Show the action sheet to the user
-        //    string action = await Application.Current.MainPage.DisplayActionSheet("Options", "Cancel", null, "Add New Course", "Edit", "Delete", "View Details");
-
-        //    // Handle the user's choice
-        //    switch (action)
-        //    {
-        //        case "Add New Course":
-        //            // Add a new course
-        //            break;
-        //        case "Edit":
-        //            _ = Application.Current.MainPage.Navigation.PushAsync(new CourseEditorPage());
-        //            break;
-        //        case "Delete":
-        //            // Delete the current course
-        //            break;
-        //        case "View Details":
-        //            OpenCourseDetails();
-        //            break;
-        //        case "Cancel":
-        //            // Do nothing
-        //            break;
-        //    }
-        //}
-
-        //private void OnCardTapped()
-        //{
-        //    Debug.WriteLine("OnCardTapped Executed");
-
-        //    // Hide the navigation bar on the MainPage
-
-        //    OpenCourseDetails();
-        //}
-
-        //private void OpenCourseDetails()
-        //{
-        //    Application.Current.MainPage.Navigation.PushAsync(new CourseDetailsPage());
-        //}
-
-        //public event PropertyChangedEventHandler PropertyChanged;
-
-        //protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        //{
-        //    Debug.WriteLine("CourseCard On Property Changed Reached");
-        //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        //}
     }
 
     public enum CourseStatus

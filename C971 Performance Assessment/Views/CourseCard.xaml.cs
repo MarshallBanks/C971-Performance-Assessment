@@ -12,23 +12,24 @@ namespace C971_Performance_Assessment.Views
 
     public partial class CourseCard : ContentView
     {
+
+        public static readonly BindableProperty CourseProperty = BindableProperty.Create(
+            nameof(Course),
+            typeof(Course),
+            typeof(CourseCard),
+            null);
+
+        public Course Course
+        {
+            get { return (Course)GetValue(CourseProperty); }
+            set { SetValue(CourseProperty, value); }
+        }
+
         public CourseCard()
         {
             InitializeComponent();
         }
 
-
-        private void OpenCourseDetails()
-        {
-            _ = Application.Current.MainPage.Navigation.PushAsync(new CourseDetailsPage());
-        }
-
-        private void CardTapped(object sender, System.EventArgs e)
-        {
-            Debug.WriteLine("OnCardTapped Executed");
-
-            OpenCourseDetails();
-        }
 
         private async Task OpenActionSheet()
         {
@@ -42,10 +43,10 @@ namespace C971_Performance_Assessment.Views
                     AddNewCourse();
                     break;
                 case "Edit":
-                    _ = Application.Current.MainPage.Navigation.PushAsync(new CourseEditorPage());
+                    OpenCourseEditor();
                     break;
                 case "Delete":
-                    // Delete the current course
+                    DeleteCourse();
                     break;
                 case "View Details":
                     OpenCourseDetails();
@@ -56,11 +57,33 @@ namespace C971_Performance_Assessment.Views
             }
         }
 
+        private void CardTapped(object sender, System.EventArgs e)
+        {
+            Debug.WriteLine("OnCardTapped Executed");
+
+            OpenCourseDetails();
+        }
+
+        private void OpenCourseDetails()
+        {
+            _ = Application.Current.MainPage.Navigation.PushAsync(new CourseDetailsPage(Course));
+        }
+
+        private void OpenCourseEditor()
+        {
+            _ = Application.Current.MainPage.Navigation.PushAsync(new CourseEditorPage(Course));
+        }
+
         private void AddNewCourse()
         {
             Debug.WriteLine("Message Sent");
             // Send the message to trigger the method in the MainViewModel
             MessagingCenter.Send(this, "AddNewCourseMessage");
+        }
+
+        private void DeleteCourse()
+        {
+            MessagingCenter.Send(this, "DeleteCourseMessage", Course);
         }
 
         private void EllipsesTapped(object sender, System.EventArgs e)

@@ -4,12 +4,9 @@
              x:Class="C971_Performance_Assessment.Views.CourseEditorPage"
              xmlns:fontAwesome="clr-namespace:FontAwesome" 
              xmlns:vm="clr-namespace:C971_Performance_Assessment.View_Models" 
+             x:DataType="vm:CourseEditorViewModel"
              BackgroundColor="#333333" >
-
-    <ContentPage.BindingContext>
-        <vm:CourseEditorViewModel/>
-    </ContentPage.BindingContext>
-
+    
     <ContentPage.Resources>
         <ResourceDictionary>
             <Style TargetType="BoxView">
@@ -126,7 +123,7 @@
                     <StackLayout Grid.Column="0" >
                         <Label Text="Status" FontSize="18"/>
                         <Frame>
-                            <Picker Title="Select a status" ItemsSource="{Binding CourseStatuses}" SelectedItem="{Binding SelectedCourseStatus}">
+                            <Picker Title="Select a status">
                                 <Picker.ItemDisplayBinding>
                                     <Binding Path="Name"/>
                                 </Picker.ItemDisplayBinding>

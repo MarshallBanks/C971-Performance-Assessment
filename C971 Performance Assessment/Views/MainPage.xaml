@@ -93,7 +93,7 @@
             <CollectionView ItemsSource="{Binding Courses}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <views:CourseCard/>
+                        <views:CourseCard Course="{Binding .}"/>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>

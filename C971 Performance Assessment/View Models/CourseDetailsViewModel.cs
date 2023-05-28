@@ -1,4 +1,5 @@
-﻿using C971_Performance_Assessment.Views;
+﻿using C971_Performance_Assessment.Data;
+using C971_Performance_Assessment.Views;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,9 +16,12 @@ namespace C971_Performance_Assessment.View_Models
     {
         public ICommand BackArrowTappedCommand { get; }
         public ICommand EllipsesTappedCommand { get; }
+        public Course Course { get; set; }
 
-        public CourseDetailsViewModel()
+        public CourseDetailsViewModel(Course course)
         {
+            Course = course;
+
             BackArrowTappedCommand = new Command(OnBackArrowTapped);
             EllipsesTappedCommand = new Command(OnEllipsesTapped);
         }
@@ -54,7 +58,7 @@ namespace C971_Performance_Assessment.View_Models
 
         private void OpenCourseEditor()
         {
-            Application.Current.MainPage.Navigation.PushAsync(new CourseEditorPage());
+            Application.Current.MainPage.Navigation.PushAsync(new CourseEditorPage(Course));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
