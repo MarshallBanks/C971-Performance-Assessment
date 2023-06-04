@@ -149,6 +149,7 @@ namespace C971_Performance_Assessment.View_Models
 
         private readonly TermRepository _termRepository;
         private readonly CourseRepository _courseRepository;
+        private readonly AssessmentRepository _assessmentRepository;
 
         public ICommand PenTappedCommand { get; }
         public ICommand DateIconTappedCommand { get; }
@@ -165,6 +166,9 @@ namespace C971_Performance_Assessment.View_Models
             // Initialize the TermRepository object
             _courseRepository = new CourseRepository(Database.GetInstance().GetConnection());
 
+            // Initialize the TermRepository object
+            _assessmentRepository = new AssessmentRepository(Database.GetInstance().GetConnection());
+
             // Add New Course
             MessagingCenter.Subscribe<CourseCard>(this, "AddNewCourseMessage", (sender) =>
             {
@@ -178,6 +182,18 @@ namespace C971_Performance_Assessment.View_Models
             {
                 Debug.WriteLine("Delete Course Message Received");
                 _ = DeleteCourse(course);
+            });
+
+            MessagingCenter.Subscribe<CourseDetailsViewModel, Course>(this, "DeleteCourseMessage", async (sender, course) =>
+            {
+                Debug.WriteLine("Delete Course Message Received");
+                _ = DeleteCourse(course);
+            });
+
+            MessagingCenter.Subscribe<CourseDetailsViewModel>(this, "RefreshCoursesMessage", async (sender) =>
+            {
+                Debug.WriteLine("Refresh Courses Message Received");
+                _ = LoadCoursesAsync();
             });
 
             // Load the terms
@@ -345,10 +361,29 @@ namespace C971_Performance_Assessment.View_Models
                 TermId = SelectedTerm.Id
             };
 
-            // Save the new course to the database
-            _ = await _courseRepository.SaveCourseAsync(newCourse);
+            // Save the new course to the database and return the autoincremented Course.Id from the database
+            int savedCourseId = await _courseRepository.SaveCourseAsync(newCourse);
 
             await LoadCoursesAsync();
+
+            // Create PA and OA
+            Assessment performanceAssessment = new Assessment
+            {
+                Title = "Performance Assessment - XXXX",
+                Type = AssessmentType.Performance,
+                CourseId = savedCourseId // link the saved Course to the Assessment
+            };
+
+            Assessment objectiveAssessment = new Assessment
+            {
+                Title = "Objective Assessment - XXXX",
+                Type = AssessmentType.Objective,
+                CourseId = savedCourseId // link the saved Course to the Assessment
+            };
+
+            // Save the new course to the database
+            _ = await _assessmentRepository.SaveAssessmentAsync(performanceAssessment);
+            _ = await _assessmentRepository.SaveAssessmentAsync(objectiveAssessment);
         }
 
         private async Task DeleteCourse(Course course)
@@ -356,6 +391,17 @@ namespace C971_Performance_Assessment.View_Models
             _ = Courses.Remove(course);
 
             _ = _courseRepository.DeleteCourseAsync(course);
+
+
+            List<Assessment> assessments = await _assessmentRepository.GetAssessmentsAsync();
+
+            foreach (Assessment assessment in assessments)
+            {
+                if (assessment.CourseId == course.Id)
+                {
+                    _ = _assessmentRepository.DeleteAssessmentAsync(assessment);
+                }
+            }
 
             if (Courses.Count == 0)
             {

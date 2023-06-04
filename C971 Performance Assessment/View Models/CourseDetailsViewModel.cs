@@ -1,12 +1,9 @@
 ﻿using C971_Performance_Assessment.Data;
 using C971_Performance_Assessment.Views;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -14,20 +11,105 @@ namespace C971_Performance_Assessment.View_Models
 {
     class CourseDetailsViewModel : INotifyPropertyChanged
     {
+        private readonly AssessmentRepository _assessmentRepository;
         public ICommand BackArrowTappedCommand { get; }
         public ICommand EllipsesTappedCommand { get; }
         public Course Course { get; set; }
+        public Assessment PerfAssessment { get; set; }
+        public Assessment ObjAssessment { get; set; }
 
-        public CourseDetailsViewModel(Course course)
+        private bool _perfAlertOn;
+        public bool PerfAlertOn
+        {
+            get => _perfAlertOn;
+            set { _perfAlertOn = value; OnPropertyChanged(); }
+        }
+
+        private bool _perfAlertOff; 
+        public bool PerfAlertOff
+        {
+            get => _perfAlertOff;
+            set { _perfAlertOff = value; OnPropertyChanged(); }
+        }
+
+        private bool _objAlertOn;
+        public bool ObjAlertOn
+        {
+            get => _objAlertOn;
+            set { _objAlertOn = value; OnPropertyChanged(); }
+        }
+
+        private bool _objAlertOff;
+        public bool ObjAlertOff
+        {
+            get => _objAlertOff;
+            set { _objAlertOff = value; OnPropertyChanged(); }
+        }
+
+        public string AlertStatusLabel => Course.IsDateAlertsActive ? "ON" : "OFF";
+
+        public string FormattedStatus => Course.GetFormattedStatus();
+
+        public CourseDetailsViewModel(Course course, Assessment perfAssessment, Assessment objAssessment)
         {
             Course = course;
+            PerfAssessment = perfAssessment;
+            ObjAssessment = objAssessment;
+
+            // Initialize the AssessmentRepository object
+            _assessmentRepository = new AssessmentRepository(Database.GetInstance().GetConnection());
+
+            SetAssessmentAlertIcons();
 
             BackArrowTappedCommand = new Command(OnBackArrowTapped);
             EllipsesTappedCommand = new Command(OnEllipsesTapped);
+
+            // Message subscriber to get updated Course and assessments from Course Editor
+            MessagingCenter.Subscribe<CourseEditorViewModel, (Course, Assessment, Assessment)>(this, "CourseUpdatedMessage", (sender, updateData) =>
+            {
+                (Course updatedCourse, Assessment updatedPerfAssessment, Assessment updatedObjAssessment) = updateData;
+                Course = updatedCourse;
+                PerfAssessment = updatedPerfAssessment;
+                ObjAssessment = updatedObjAssessment;
+                SetAssessmentAlertIcons();
+                OnPropertyChanged(nameof(Course));
+                OnPropertyChanged(nameof(PerfAssessment));
+                OnPropertyChanged(nameof(ObjAssessment));
+            });
+        }
+
+        // Swaps visibility of bell on and bell off icon in xaml
+        // For both obj and perf assessment
+        private void SetAssessmentAlertIcons()
+        {
+            if (PerfAssessment.DateAlertIsOn)
+            {
+                PerfAlertOn = true;
+                PerfAlertOff = false;
+            }
+            else if (!PerfAssessment.DateAlertIsOn)
+            {
+                PerfAlertOn = false;
+                PerfAlertOff = true;
+            }
+
+            if (ObjAssessment.DateAlertIsOn)
+            {
+                ObjAlertOn = true;
+                ObjAlertOff = false;
+            }
+            else if (!ObjAssessment.DateAlertIsOn)
+            {
+                ObjAlertOn = false;
+                ObjAlertOff = true;
+            }
         }
 
         private void OnBackArrowTapped()
         {
+            // Send a message to Main Page to refresh Course Data
+            MessagingCenter.Send(this, "RefreshCoursesMessage");
+
             BackToMainPage();
         }
 
@@ -48,7 +130,8 @@ namespace C971_Performance_Assessment.View_Models
                     OpenCourseEditor();
                     break;
                 case "Delete":
-                    // Edit the current course
+                    DeleteCourse();
+                    BackToMainPage();
                     break;
                 case "Cancel":
                     // Do nothing
@@ -58,7 +141,12 @@ namespace C971_Performance_Assessment.View_Models
 
         private void OpenCourseEditor()
         {
-            Application.Current.MainPage.Navigation.PushAsync(new CourseEditorPage(Course));
+            Application.Current.MainPage.Navigation.PushAsync(new CourseEditorPage(Course, PerfAssessment, ObjAssessment));
+        }
+
+        private void DeleteCourse()
+        {
+            MessagingCenter.Send(this, "DeleteCourseMessage", Course);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

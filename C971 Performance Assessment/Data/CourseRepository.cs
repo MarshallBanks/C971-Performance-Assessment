@@ -26,20 +26,23 @@ namespace C971_Performance_Assessment.Data
                             .FirstOrDefaultAsync();
         }
 
-        public Task<int> SaveCourseAsync(Course course)
+        public async Task<int> SaveCourseAsync(Course course)
         {
-            Debug.WriteLine($"SaveCourseAsync Reached. Course {course.Id}");
+            Debug.WriteLine($"SaveCourseAsync Reached. Course {course.Title} {course.Id}");
+
             if (course.Id != 0)
             {
-                Debug.WriteLine($"UpdateAsync reached. Course {course.Id}");
-                return _database.UpdateAsync(course);
+                Debug.WriteLine($"UpdateAsync reached. Course {course.Title} {course.Id} ");
+                await _database.UpdateAsync(course);
             }
             else
             {
                 Debug.WriteLine($"InsertAsync Reached. Course {course.Id}");
-                return _database.InsertAsync(course);
+                await _database.InsertAsync(course);
             }
 
+            int lastInsertedId = await _database.ExecuteScalarAsync<int>("SELECT last_insert_rowid();");
+            return lastInsertedId;
         }
 
         public Task<int> DeleteCourseAsync(Course course)

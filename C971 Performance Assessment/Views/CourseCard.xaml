@@ -5,7 +5,7 @@
              xmlns:fontAwesome="clr-namespace:FontAwesome" 
              xmlns:data="clr-namespace:C971_Performance_Assessment.Data"
              x:Class="C971_Performance_Assessment.Views.CourseCard"
-             xmlns:vm="clr-namespace:C971_Performance_Assessment.View_Models" >
+             xmlns:views="clr-namespace:C971_Performance_Assessment.Views">
 
     <StackLayout BackgroundColor="#292929" Margin="10,10,10,0" Padding="10" Spacing="10">
         <StackLayout Orientation="Horizontal" Spacing="5">
@@ -18,7 +18,7 @@
                         <Grid.GestureRecognizers>
                         <TapGestureRecognizer Tapped="CardTapped"/>
                         </Grid.GestureRecognizers>
-                        <Label Grid.Column="0" Text="Course Number" FontAttributes="Bold" VerticalOptions="CenterAndExpand"/>
+                    <Label x:DataType="data:Course" Grid.Column="0" Text="{Binding Code}" FontAttributes="Bold" VerticalOptions="CenterAndExpand"/>
                     </Grid>
                     <Label Grid.Column="1" Text="{x:Static fontAwesome:FontAwesomeIcons.Ellipsis}" FontFamily="FAS" TextColor="White" FontSize="30" Margin="0,0,5,0" HorizontalOptions="End">
                         <Label.GestureRecognizers>
@@ -34,8 +34,9 @@
             <Label x:DataType="data:Course" Text="{Binding Title}" FontAttributes="Bold" />
             <BoxView x:DataType="data:Course" Color="Black" HeightRequest="1" />
             <Label x:DataType="data:Course" Text="ASSESSMENTS" FontAttributes="Bold" />
-            <Label x:DataType="data:Course" Text="Objective -" />
-            <Label x:DataType="data:Course" Text="Performance -" />
+            <Label Text="Objective - (1)"/>
+            <Label Text="Performance - (1)"/>
+
         </StackLayout>
     </StackLayout>
 </ContentView>

@@ -8,11 +8,11 @@ namespace C971_Performance_Assessment.Pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class CourseDetailsPage : ContentPage
     {
-        public CourseDetailsPage(Course course)
+        public CourseDetailsPage(Course course, Assessment perfAssessment, Assessment objAssessment)
         {
             InitializeComponent();
 
-            var viewModel = new CourseDetailsViewModel(course);
+            var viewModel = new CourseDetailsViewModel(course, perfAssessment, objAssessment);
             this.BindingContext = viewModel;
 
             NavigationPage.SetHasNavigationBar(this, false);

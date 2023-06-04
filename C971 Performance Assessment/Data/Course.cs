@@ -1,12 +1,5 @@
-﻿using C971_Performance_Assessment.Pages;
-using C971_Performance_Assessment.Views;
-using SQLite;
+﻿using SQLite;
 using System;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using System.Windows.Input;
-using Xamarin.Forms;
 
 namespace C971_Performance_Assessment.Data
 {
@@ -17,13 +10,32 @@ namespace C971_Performance_Assessment.Data
         public string Code { get; set; } = "Course Number";
         public string Title { get; set; } = "Course Title";
         public string InstructorName { get; set; } = "Instructor Name";
-        public string InstructorNumber { get; set; } = "Instructor Number";
+        public string InstructorNumber { get; set; } = "555.555.5555";
         public string InstructorEmail { get; set; } = "www.example@wgu.edu";
-        public string Notes { get; set; } = "Enter notes here";
+        public string Notes { get; set; }
         public CourseStatus Status { get; set; } = CourseStatus.InProgress;
         public DateTime StartDate { get; set; } = DateTime.Now;
         public DateTime EndDate { get; set; } = DateTime.Now.AddDays(7);
+        public bool IsDateAlertsActive { get; set; } = true;
         public int TermId { get; set; }
+
+
+        public string GetFormattedStatus()
+        {
+            switch (Status)
+            {
+                case CourseStatus.InProgress:
+                    return "In Progress";
+                case CourseStatus.Completed:
+                    return "Completed";
+                case CourseStatus.Dropped:
+                    return "Dropped";
+                case CourseStatus.PlanToTake:
+                    return "Plan to Take";
+                default:
+                    return string.Empty;
+            }
+        }
     }
 
     public enum CourseStatus
@@ -33,4 +45,5 @@ namespace C971_Performance_Assessment.Data
         Dropped,
         PlanToTake
     }
+
 }

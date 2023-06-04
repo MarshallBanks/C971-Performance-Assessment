@@ -1,7 +1,9 @@
 ﻿using C971_Performance_Assessment.Data;
 using C971_Performance_Assessment.Pages;
 using C971_Performance_Assessment.View_Models;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -12,6 +14,9 @@ namespace C971_Performance_Assessment.Views
 
     public partial class CourseCard : ContentView
     {
+        private readonly AssessmentRepository _assessmentRepository;
+        public Assessment PerfAssessment { get; set; }
+        public Assessment ObjAssessment { get; set; }
 
         public static readonly BindableProperty CourseProperty = BindableProperty.Create(
             nameof(Course),
@@ -28,6 +33,11 @@ namespace C971_Performance_Assessment.Views
         public CourseCard()
         {
             InitializeComponent();
+
+            // Initialize the TermRepository object
+            _assessmentRepository = new AssessmentRepository(Database.GetInstance().GetConnection());
+
+            _ = LoadAssessments();
         }
 
 
@@ -66,12 +76,52 @@ namespace C971_Performance_Assessment.Views
 
         private void OpenCourseDetails()
         {
-            _ = Application.Current.MainPage.Navigation.PushAsync(new CourseDetailsPage(Course));
+            if(ObjAssessment == null)
+            {
+                Debug.Write($"Objective Assessment is NULL");
+            }
+            else
+            {
+                Debug.Write($"Objective Assessment is called {ObjAssessment.Title}");
+                _ = Application.Current.MainPage.Navigation.PushAsync(new CourseDetailsPage(Course, PerfAssessment, ObjAssessment));
+            }
         }
 
         private void OpenCourseEditor()
         {
-            _ = Application.Current.MainPage.Navigation.PushAsync(new CourseEditorPage(Course));
+            Debug.Write($"Objective Assessment is called {ObjAssessment.Title}");
+            _ = Application.Current.MainPage.Navigation.PushAsync(new CourseEditorPage(Course, PerfAssessment, ObjAssessment));
+        }
+
+        private async Task LoadAssessments()
+        {
+            // Had to add a while loop to better time assigning
+            // Obj and Perf with saving assessments in database
+            // otherwise would get a null object reference
+            int maxIterations = 10; 
+            int iterationCount = 0;
+
+            while ((PerfAssessment == null || ObjAssessment == null) && iterationCount < maxIterations)
+            {
+                ++iterationCount;
+
+                List<Assessment> assessments = await _assessmentRepository.GetAssessmentsAsync();
+
+                foreach (Assessment assessment in assessments)
+                {
+                    if (assessment.CourseId == Course.Id && assessment.Type == AssessmentType.Performance)
+                    {
+                        PerfAssessment = assessment;
+                        OnPropertyChanged(nameof(PerfAssessment));
+                    }
+                    if (assessment.CourseId == Course.Id && assessment.Type == AssessmentType.Objective)
+                    {
+                        ObjAssessment = assessment;
+                        Debug.WriteLine($"ObjAssessment is called {ObjAssessment.Title}");
+                        OnPropertyChanged(nameof(ObjAssessment));
+                    }
+                }
+            }
         }
 
         private void AddNewCourse()

@@ -5,6 +5,8 @@
              xmlns:fontAwesome="clr-namespace:FontAwesome" 
              xmlns:vm="clr-namespace:C971_Performance_Assessment.View_Models" 
              x:DataType="vm:CourseEditorViewModel"
+             xmlns:data="clr-namespace:C971_Performance_Assessment.Data"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              BackgroundColor="#333333" >
     
     <ContentPage.Resources>
@@ -21,11 +23,16 @@
             </Style>
             <Style TargetType="Entry">
                 <Setter Property="HeightRequest" Value="38"/>
-                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="FontSize" Value="17"/> 
             </Style>
             <Style TargetType="Label">
                 <Setter Property="Margin" Value="0,10,0,-5"/>
             </Style>
+            <Style TargetType="Switch">
+                <Setter Property="OnColor" Value="LightGreen"/>
+                <Setter Property="ThumbColor" Value="ForestGreen"/>
+            </Style>
+                
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -79,40 +86,51 @@
                     <StackLayout Grid.Column="0" >
                         <Label Text="Course Name" FontSize="18"/>
                         <Frame>
-                            <Entry Text="New Course"/>
+                            <Entry Text="{Binding Course.Title}"/>
                         </Frame>
                     </StackLayout>
                     <StackLayout Grid.Column="1">
                         <Label Text="Course Number" FontSize="18" />
                         <Frame>
-                            <Entry Text="XXXX"/>
+                            <Entry Text="{Binding Course.Code}"/>
                         </Frame>
                     </StackLayout>
                 </Grid>
 
-                <!-- DATES AND DATE ALERTS -->
+                <!-- START DATE | STATUS -->
                 <Grid Margin="0,0,0,-10">
 
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1.5*" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                
+
                     <StackLayout Grid.Column="0">
-                        <Label Text="Start Date - End Date" FontSize="18"/>
+                        <Label Text="Start Date" FontSize="18"/>
                         <Frame>
-                            <Entry Text="MM/DD/YY - MM/DD/YY"/>
+                            <DatePicker Date="{Binding Course.StartDate}"/>
                         </Frame>
                     </StackLayout>
 
-                    <StackLayout Grid.Column="1">
-                        <Label Text="Date Alerts?" FontSize="18" HorizontalOptions="Center"/>
-                        <Switch Scale="1.5" HorizontalOptions="Center" Margin="6"/>
+                    <StackLayout Grid.Column="1" >
+                        <Label Text="Status" FontSize="18"/>
+                        <Frame>
+                            <Picker SelectedItem="{Binding SelectedStatus}">
+                                <Picker.ItemsSource>
+                                    <x:Array Type="{x:Type x:String}">
+                                        <x:String>In Progress</x:String>
+                                        <x:String>Completed</x:String>
+                                        <x:String>Dropped</x:String>
+                                        <x:String>Plan To Take</x:String>
+                                    </x:Array>
+                                </Picker.ItemsSource>
+                            </Picker>
+                        </Frame>
                     </StackLayout>
 
                 </Grid>
 
-                <!-- COURSE STATUS -->
+                <!-- END DATE | DATE ALERTS -->
                 <Grid>
 
                     <Grid.ColumnDefinitions>
@@ -121,26 +139,25 @@
                     </Grid.ColumnDefinitions>
 
                     <StackLayout Grid.Column="0" >
-                        <Label Text="Status" FontSize="18"/>
+                        <Label Text="End Date" FontSize="18"/>
                         <Frame>
-                            <Picker Title="Select a status">
-                                <Picker.ItemDisplayBinding>
-                                    <Binding Path="Name"/>
-                                </Picker.ItemDisplayBinding>
-                            </Picker>
+                            <DatePicker Date="{Binding Course.EndDate}"/>
                         </Frame>
                     </StackLayout>
 
-                    <!-- SPACER -->
-                    <BoxView Grid.Column="1" HeightRequest="2" WidthRequest="25" Color="Transparent" />
+                    <StackLayout Grid.Column="1">
+                        <Label Text="Date Alerts?" FontSize="18" HorizontalOptions="Center"/>
+                        <Switch IsToggled="{Binding Course.IsDateAlertsActive}" Scale="1.5" HorizontalOptions="Center" Margin="6"/>
+                    </StackLayout>
 
-                <!-- COURSE NOTES -->
                 </Grid>
+                
+                <!-- COURSE NOTES -->
                 <ScrollView>
                     <StackLayout Grid.Column="1" >
                         <Label Text="Notes" FontSize="18"/>
                         <Frame>
-                            <Editor HeightRequest="200" />
+                            <Editor HeightRequest="200" Text="{Binding Course.Notes}" FontSize="16"/>
                         </Frame>
                     </StackLayout>
                 </ScrollView>
@@ -161,21 +178,21 @@
                     <StackLayout Grid.Column="0" >
                         <Label Text="Name" FontSize="18"/>
                         <Frame>
-                            <Entry Text="Enter Name Here"/>
+                            <Entry Text="{Binding Course.InstructorName}"/>
                         </Frame>
                     </StackLayout>
 
                     <StackLayout Grid.Row="1" Margin="0,-8,0,0">
                         <Label Text="Phone" FontSize="18"/>
                         <Frame>
-                            <Entry Text="(xxx)xxx-xxxx"/>
+                            <Entry Text="{Binding Course.InstructorNumber}"/>
                         </Frame>
                     </StackLayout>
 
                     <StackLayout Grid.Row="2" Margin="0,-12,0,0">
                         <Label Text="Email" FontSize="18"/>
                         <Frame>
-                            <Entry Text="example@wgu.edu"/>
+                            <Entry Text="{Binding Course.InstructorEmail}"/>
                         </Frame>
                     </StackLayout>
 
@@ -199,7 +216,7 @@
                     <StackLayout Grid.Column="0" >
                         <Label Text="Name" FontSize="18"/>
                         <Frame>
-                            <Entry Text="Performance Assessment - BOP3"/>
+                            <Entry Text="{Binding PerfAssessment.Title}"/>
                         </Frame>
                     </StackLayout>
 
@@ -212,13 +229,13 @@
                     <StackLayout Grid.Row="0" Margin="0,-8,0,0">
                         <Label Text="Due Date" FontSize="18"/>
                         <Frame>
-                            <Entry Text="MM/DD/YY"/>
+                            <DatePicker Date="{Binding PerfAssessment.DueDate}"/>
                         </Frame>
                     </StackLayout>
 
                     <StackLayout Grid.Column="1" Margin="5,-7,0,0">
                         <Label Text="Date Alerts?" FontSize="18" HorizontalOptions="Center"/>
-                        <Switch Scale="1.5" HorizontalOptions="Center" Margin="6"/>
+                        <Switch IsToggled="{Binding PerfAssessment.DateAlertIsOn}" Scale="1.5" HorizontalOptions="Center" Margin="6"/>
                     </StackLayout>
 
                 </Grid>
@@ -239,7 +256,7 @@
                     <StackLayout Grid.Column="0" >
                         <Label Text="Name" FontSize="18"/>
                         <Frame>
-                            <Entry Text="Performance Assessment - BOP3"/>
+                            <Entry Text="{Binding ObjAssessment.Title}"/>
                         </Frame>
                     </StackLayout>
 
@@ -252,13 +269,13 @@
                     <StackLayout Grid.Row="0" Margin="0,-8,0,0">
                         <Label Text="Due Date" FontSize="18"/>
                         <Frame>
-                            <Entry Text="MM/DD/YYYY"/>
+                            <DatePicker Date="{Binding ObjAssessment.DueDate}"/>
                         </Frame>
                     </StackLayout>
 
                     <StackLayout Grid.Column="1" Margin="5,-7,0,0">
                         <Label Text="Date Alerts?" FontSize="18" HorizontalOptions="Center"/>
-                        <Switch Scale="1.5" HorizontalOptions="Center" Margin="6"/>
+                        <Switch IsToggled="{Binding ObjAssessment.DateAlertIsOn}" Scale="1.5" HorizontalOptions="Center" Margin="6"/>
                     </StackLayout>
 
                 </Grid>

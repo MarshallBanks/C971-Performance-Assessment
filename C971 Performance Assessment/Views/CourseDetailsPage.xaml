@@ -57,7 +57,7 @@
                             <Label.FormattedText>
                                 <FormattedString>
                                     <Span Text="Status: " />
-                                    <Span Text="{Binding Course.Status}" />
+                                    <Span Text="{Binding FormattedStatus}" />
                                 </FormattedString>
                             </Label.FormattedText>
                         </Label>
@@ -82,14 +82,29 @@
                 <BoxView/>
                 <!--COURSE DATES AND ALERT STATUS-->
                 <Label     Text="Start Date - End Date" FontAttributes="Bold" FontSize="20" Margin="10,10,0,0"/>
-                <Label     x:Name="CourseDates" Text="MM/DD/YY - MM/DD/YY" FontSize="20" Margin="10,-5,0,0"/>
-                <Label     x:Name="AlertStatus" Text="Alerts: ON" FontAttributes="Bold" FontSize="18" Margin="10,-5,0,0"/>
+                <Label x:Name="CourseDates" FontSize="20" Margin="10,-5,0,0">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="{Binding Course.StartDate, StringFormat='{0:MM/dd/yyyy}'}" />
+                            <Span Text=" - " />
+                            <Span Text="{Binding Course.EndDate, StringFormat='{0:MM/dd/yyyy}'}"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+                <Label     x:Name="AlertStatus" FontAttributes="Bold" FontSize="18" Margin="10,-5,0,0">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Alerts: "/>
+                            <Span Text="{Binding AlertStatusLabel}"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
                 <BoxView/>
                 <!--INSTRUCTOR INFO-->
                 <Label     Text="Instructor" FontAttributes="Bold" FontSize="24" Margin="10,10,0,0"/>
-                <Label     x:Name="InstructorName" Text="John Doe" FontSize="20" Margin="10,-5,0,0"/>
-                <Label     x:Name="InsructorEmail" Text="john.doe@wgu.edu" FontSize="20" Margin="10,-5,0,0"/>
-                <Label     x:Name="InstructorNumber" Text="385.555.1234" FontSize="20" Margin="10,-5,0,0"/>
+                <Label     x:Name="InstructorName" Text="{Binding Course.InstructorName}" FontSize="20" Margin="10,-5,0,0"/>
+                <Label     x:Name="InsructorEmail" Text="{Binding Course.InstructorEmail}" FontSize="20" Margin="10,-5,0,0"/>
+                <Label     x:Name="InstructorNumber" Text="{Binding Course.InstructorNumber}" FontSize="20" Margin="10,-5,0,0"/>
                 <BoxView/>
                 <!--NOTES-->
                 <Grid>
@@ -101,7 +116,7 @@
 
                     <StackLayout Grid.Column="0">
                         <Label Text="Notes" FontAttributes="Bold" FontSize="24" Margin="10,10,0,0"/>
-                        <Label Text="NOTES TEXT PLACEHOLDER" FontSize="13" Margin="10,-5,0,0"/>
+                        <Label Text="{Binding Course.Notes}" FontSize="16" Margin="10,-5,0,0"/>
                     </StackLayout>
 
                     <Label Grid.Column="1" 
@@ -131,15 +146,32 @@
                                            WidthRequest="30"
                                            HeightRequest="30"/>
                         <StackLayout Grid.Column="1" Orientation="Vertical" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
-                            <Label x:Name="PATitle" Text="Performance Assessment - BOP3" FontAttributes="Bold" TextColor="Black" />
-                            <Label x:Name="PADates" Text="DUE BY: MM/DD/YY" FontAttributes="Bold" TextColor="Black" Margin="27,0,0,0" />
+                            <Label x:Name="PATitle" Text="{Binding PerfAssessment.Title}" FontAttributes="Bold" TextColor="Black" />
+                            <Label x:Name="PADate" FontAttributes="Bold" TextColor="Black" Margin="27,0,0,0">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="DUE BY: " />
+                                        <Span Text="{Binding PerfAssessment.DueDate, StringFormat='{0:MM/dd/yyyy}', TargetNullValue='N/A'}"/>
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
                         </StackLayout>
                         <Image  x:Name="PAAlarm"
+                                IsVisible="{Binding PerfAlertOn}"
                                 Grid.Column ="2"
                                 Margin="6,5,0,0"
                                 Source="{local:ImageResource Source=C971_Performance_Assessment.Images.alarm-on.png}"
                                 WidthRequest="40"
                                 HeightRequest="40"/>
+                        <Label Text="{x:Static fontAwesome:FontAwesomeIcons.BellSlash}"
+                               TextColor="Black"
+                               IsVisible="{Binding PerfAlertOff}"
+                               Grid.Column="2"
+                               FontFamily="FAS" 
+                               HorizontalOptions="End"
+                               FontSize="28" 
+                               FontAttributes="Bold" 
+                               Margin="0,11,2,0"/>
                     </Grid>
                 </Frame>
                 <!--OBJECTIVE ASSESSMENT-->
@@ -159,15 +191,32 @@
                                            WidthRequest="30"
                                            HeightRequest="30"/>
                         <StackLayout Grid.Column="1" Orientation="Vertical" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
-                            <Label x:Name="OATitle" Text="Performance Assessment - BOP3" FontAttributes="Bold" TextColor="Black" />
-                            <Label x:Name="OADates" Text="DUE BY: MM/DD/YY" FontAttributes="Bold" TextColor="Black" Margin="27,0,0,0" />
+                            <Label x:Name="OATitle" Text="{Binding ObjAssessment.Title}" FontAttributes="Bold" TextColor="Black" />
+                            <Label x:Name="OADate" FontAttributes="Bold" TextColor="Black" Margin="27,0,0,0" >
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="DUE BY: " />
+                                        <Span Text="{Binding ObjAssessment.DueDate, StringFormat='{0:MM/dd/yyyy}', TargetNullValue='N/A'}"/>
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
                         </StackLayout>
                         <Image  x:Name="OAAlarm"
+                                IsVisible="{Binding ObjAlertOn}"
                                 Grid.Column ="2"
                                 Margin="6,5,0,0"
                                 Source="{local:ImageResource Source=C971_Performance_Assessment.Images.alarm-on.png}"
                                 WidthRequest="40"
                                 HeightRequest="40"/>
+                        <Label Text="{x:Static fontAwesome:FontAwesomeIcons.BellSlash}"
+                               TextColor="Black"
+                               IsVisible="{Binding ObjAlertOff}"
+                               Grid.Column="2"
+                               FontFamily="FAS" 
+                               HorizontalOptions="End"
+                               FontSize="28" 
+                               FontAttributes="Bold" 
+                               Margin="0,11,2,0"/>
                     </Grid>
                 </Frame>
                 <!-- SPACER -->
