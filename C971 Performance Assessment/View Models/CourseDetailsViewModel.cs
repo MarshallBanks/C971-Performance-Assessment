@@ -48,13 +48,19 @@ namespace C971_Performance_Assessment.View_Models
 
         public string AlertStatusLabel => Course.IsDateAlertsActive ? "ON" : "OFF";
 
-        public string FormattedStatus => Course.GetFormattedStatus();
+        private string _formattedStatus;
+        public string FormattedStatus
+        {
+            get => _formattedStatus;
+            set { _formattedStatus = value; OnPropertyChanged(); }
+        }
 
         public CourseDetailsViewModel(Course course, Assessment perfAssessment, Assessment objAssessment)
         {
             Course = course;
             PerfAssessment = perfAssessment;
             ObjAssessment = objAssessment;
+            FormattedStatus = Course.GetFormattedStatus();
 
             // Initialize the AssessmentRepository object
             _assessmentRepository = new AssessmentRepository(Database.GetInstance().GetConnection());
@@ -71,6 +77,7 @@ namespace C971_Performance_Assessment.View_Models
                 Course = updatedCourse;
                 PerfAssessment = updatedPerfAssessment;
                 ObjAssessment = updatedObjAssessment;
+                FormattedStatus = Course.GetFormattedStatus();
                 SetAssessmentAlertIcons();
                 OnPropertyChanged(nameof(Course));
                 OnPropertyChanged(nameof(PerfAssessment));

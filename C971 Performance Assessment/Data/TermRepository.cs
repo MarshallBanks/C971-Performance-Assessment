@@ -29,20 +29,22 @@ namespace C971_Performance_Assessment.Data
                             .FirstOrDefaultAsync();
         }
 
-        public Task<int> SaveTermAsync(Term term)
+        public async Task<int> SaveTermAsync(Term term)
         {
             Debug.WriteLine($"SaveTermAsync Reached. Term {term.Id}");
             if (term.Id != 0)
             {
                 Debug.WriteLine($"UpdateAsync reached. Term {term.Id}");
-                return _database.UpdateAsync(term);
+                await _database.UpdateAsync(term);
             }
             else
             {
                 Debug.WriteLine($"InsertAsync Reached. Term {term.Id}");
-                return _database.InsertAsync(term);
+                await _database.InsertAsync(term);
             }
-            
+
+            int lastInsertedId = await _database.ExecuteScalarAsync<int>("SELECT last_insert_rowid();");
+            return lastInsertedId;
         }
 
         public Task<int> DeleteTermAsync(Term term)

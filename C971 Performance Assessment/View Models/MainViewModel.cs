@@ -196,6 +196,12 @@ namespace C971_Performance_Assessment.View_Models
                 _ = LoadCoursesAsync();
             });
 
+            MessagingCenter.Subscribe<CourseEditorViewModel>(this, "RefreshCoursesMessage", async (sender) =>
+            {
+                Debug.WriteLine("Refresh Courses Message Received");
+                await LoadCoursesAsync();
+            });
+
             // Load the terms
             _ = LoadTermsAsync();
 
@@ -220,20 +226,35 @@ namespace C971_Performance_Assessment.View_Models
                 new Term { Name = "Add New Term" }
             };
 
-            List<Term> terms = await _termRepository.GetTermsAsync();
+            bool dummyDataAvailable = false;
+            int maxAttempts = 5;
+            int currentAttempt = 0;
 
-            // If the database is not empty
-            if (terms != null)
+            while(!dummyDataAvailable && currentAttempt < maxAttempts)
             {
-                int insertIndex = 1; // Inserts actual terms after the "Select Term" Dummy Term
-                foreach (var term in terms)
+
+                List<Term> terms = await _termRepository.GetTermsAsync();
+
+                // If the database is not empty
+                if (terms.Count != 0)
                 {
-                    
-                    Terms.Insert(insertIndex, term); 
-                    insertIndex++;
-                   
+                    dummyDataAvailable = true;
+
+                    int insertIndex = 1; // Inserts actual terms after the "Select Term" Dummy Term
+                    foreach (var term in terms)
+                    {
+
+                        Terms.Insert(insertIndex, term);
+                        insertIndex++;
+
+                    }
                 }
+
+                currentAttempt++;
+                _ = Task.Delay(500);
             }
+
+            
 
             if (appLaunch)
             {
@@ -276,6 +297,12 @@ namespace C971_Performance_Assessment.View_Models
         private async void OnDateIconTapped()
         {
             Debug.WriteLine("OnDateIconTapped Reached.");
+
+            if (TermStartDate > TermEndDate)
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", "Term Start Date cannot be after Term End Date", "OK");
+                return;
+            }
 
             IsDatePickerVisible = !IsDatePickerVisible;
             IsDateLabelVisible = !IsDateLabelVisible;
