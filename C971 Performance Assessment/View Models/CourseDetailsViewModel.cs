@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace C971_Performance_Assessment.View_Models
@@ -14,6 +15,7 @@ namespace C971_Performance_Assessment.View_Models
         private readonly AssessmentRepository _assessmentRepository;
         public ICommand BackArrowTappedCommand { get; }
         public ICommand EllipsesTappedCommand { get; }
+        public ICommand ShareTappedCommand { get; }
         public Course Course { get; set; }
         public Assessment PerfAssessment { get; set; }
         public Assessment ObjAssessment { get; set; }
@@ -69,6 +71,7 @@ namespace C971_Performance_Assessment.View_Models
 
             BackArrowTappedCommand = new Command(OnBackArrowTapped);
             EllipsesTappedCommand = new Command(OnEllipsesTapped);
+            ShareTappedCommand = new Command(OnShareTapped);
 
             // Message subscriber to get updated Course and assessments from Course Editor
             MessagingCenter.Subscribe<CourseEditorViewModel, (Course, Assessment, Assessment)>(this, "CourseUpdatedMessage", (sender, updateData) =>
@@ -123,6 +126,15 @@ namespace C971_Performance_Assessment.View_Models
         private void BackToMainPage()
         {
             Application.Current.MainPage.Navigation.PopAsync();
+        }
+
+        private void OnShareTapped()
+        {
+            Share.RequestAsync(new ShareTextRequest
+            {
+                Text = $"{Course.Title} Notes: {Course.Notes}",
+                Title = "Share Notes"
+            }); ;
         }
 
         private async void OnEllipsesTapped()

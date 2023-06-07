@@ -124,7 +124,11 @@
                            FontFamily="FAS" 
                            FontSize="25"
                            HorizontalOptions="End"
-                           Margin="10"/>
+                           Margin="10">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ShareTappedCommand}"/>
+                        </Label.GestureRecognizers>
+                    </Label>
                 </Grid>
                 <BoxView/>
                 <!--ASSESSMENTS-->
