@@ -1,3 +1,13 @@
+## Disclaimer
+
+This project is licensed under a custom MIT License with viewing restrictions. It is intended solely for viewing by potential employers to evaluate my skills and experience.
+
+**Usage Restrictions:**
+- Commercial use, distribution, modification, and use of this code in educational settings or other projects is strictly prohibited.
+
+For more details, see the [LICENSE](./LICENSE) file.
+
+
 # C971-Performance-Assessment
 
 WGU-C971-Final
